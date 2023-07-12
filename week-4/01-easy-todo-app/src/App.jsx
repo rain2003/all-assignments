@@ -1,21 +1,55 @@
+/* eslint-disable react/jsx-key */
+/* eslint-disable react/prop-types */
+/* eslint-disable no-unused-vars */
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import { useEffect } from 'react'
+import axios from "axios"
 
 function App() {
-  const [todos, setTodos] = useState([])
-    // fetch all todos from server
-
+  
   return (
-    <>
       <div>
         <h1>Easy Todo App</h1>
         <input type="text" />
+        <ListTodos/>
       </div>
-    </>
+    
   )
 }
+
+function ListTodos() {
+  const [todos, setTodos] = useState([]);
+
+  useEffect(() => {
+    fetchTodos();
+  }, []);
+
+  const fetchTodos = async () => {
+    try {
+      const response = await axios.get('http://localhost:3000/todos');
+      setTodos(response.data);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  return (
+    <div>
+      <h3>Todos List</h3>
+      {console.log(todos)}
+      <ul>
+        {todos.map((todo) =>{
+          return <div>
+            <li>{todo.title}</li>
+            <li>{todo.messgae}</li>
+          </div>
+        })}
+      </ul>
+    </div>
+  );
+}
+
 
 function Todo(props) {
     // Add a delete button here so user can delete a TODO.

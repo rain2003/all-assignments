@@ -41,12 +41,18 @@
  */
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const cors = require('cors');
 const app = express();
 
 app.use(bodyParser.json());
+app.use(cors());
 
-let todos = [];
+
+let todos = [{
+  title : " i have to study today",
+  messgae : "only god can help me"
+}
+];
 
 app.get('/todos', (req, res) => {
   res.json(todos);
@@ -97,4 +103,8 @@ app.use((req, res, next) => {
   res.status(404).send();
 });
 
-module.exports = app;
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});
+
