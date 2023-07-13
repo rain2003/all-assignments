@@ -56,7 +56,6 @@ let todos = [{
 ];
 
 app.get('/todos', (req, res) => {
-  console.log(todos);
   res.json(todos);
 });
 
@@ -76,7 +75,6 @@ app.post('/todos', (req, res) => {
     description: req.body.description
   };
   todos.push(newTodo);
-  console.log(todos);
   res.status(201).json(newTodo);
 });
 
