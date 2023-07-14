@@ -7,19 +7,65 @@ import { useEffect } from 'react'
 
 function App() {
   //state variables
-  const [title , setTitle] = useState("");
-  const [description , setDesc] = useState("");
 
   return (
       <div style={{fontSize : "20px"}}>
         <h1>Easy Todo App</h1>
-        <div style={{
-          display : 'flex' , 
-          flexDirection : 'column' , 
-          width : 400,
-        }}>
+          <ListTodos />
+      </div>
+    
+  )
+}
 
-        <input style={{
+
+function ListTodos() {
+  const [todos, setTodos] = useState([]);
+  //for passing the title and description to the backend
+  const [title , setTitle] = useState("");
+  const [description , setDesc] = useState("");
+
+  useEffect(() => {
+    fetch("http://localhost:3000/todos", {
+      method: "GET"
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setTodos(data);
+      });
+  }, []);
+  
+  //function to send request to create a Todo
+  function addTodo(id) {
+    fetch("http://localhost:3000/todos" ,{
+      method : "POST",
+      body : JSON.stringify({
+        title : title,
+        description : description
+      }),
+      headers : {
+        "Content-type": "application/json"
+      }
+    }).then((res)=>{
+      res.json().then((newTodo)=>{
+        setTodos(prevTodos => [...prevTodos, newTodo]);
+      })
+    })
+  }
+  
+//function to send request to the backend to delete a todo
+  function deleteTodo(id) {
+    fetch("http://localhost:3000/todos/" + id, {
+      method: "DELETE"
+    }).then(() => {
+      setTodos(todos.filter(todo => todo.id !== id));
+    });
+  }
+
+  return (
+    <div>
+      <input style={{
+          display : "flex",
+          flexDirection : "column",
           marginBottom : "15px",
           fontSize : "20px"}} 
           type="text" placeholder='title' 
@@ -34,79 +80,37 @@ function App() {
         onChange={(e)=>{
           setDesc(e.target.value);
         }} />
-        </div>
-        <button style={{fontSize : 14 , marginTop : 15}} 
-        //sending request to backend for adding a new todo
-        onClick={()=>{
-          fetch("http://localhost:3000/todos" , {
-            method : "POST",
-            body : JSON.stringify({
-              title : title ,
-              description : description
-            }),
-            headers : {
-              "Content-type" : "application/json"
-            }
-          })  
-        }}
+        <br />
+        <button  style={{fontSize : 14 , marginTop : 15}} 
+        //calling the addTodo function to create a todo
+        onClick={()=> addTodo()}
         >Send</button>
-          <ListTodos/>
-          
-        {/* <ListTodos/> */}
-      </div>
-    
-  )
-}
-
-// code for getting all the stored todos
-function ListTodos() {
-  const [todos, setTodos] = useState([]);
-
-  useEffect(()=>{
-    fetch("http://localhost:3000/todos" , {
-      method : "GET"
-    }).then((res)=>{
-      res.json().then((data)=>{
-        setTodos(data);
-      })
-    })  
-  })
-
-  return (
-    <div>
       <h3>Your Todos List</h3>
       <ul>
-        {todos.map((todo,index) =>(
-          <div key = {todo.id} 
-          style={{
-            marginTop : "10px"
-          }}>
-          <li>
-            Id :-  {todo.id}
-            <br />
-            Title :-  {todo.title}
-            <br />
-            Message :- {todo.description} 
-            <button 
-            style={{marginLeft:"9px" , 
-            fontSize : "15px"
-            }}
-            //calling the deleteTodo function which in turn sends the request to the backend
-            onClick={() => deleteTodo(todo.id)}
-            >Delete</button>
-          </li>
+        {todos.map((todo, index) => (
+          <div key={todo.id} style={{ marginTop: "10px" }}>
+            <li>
+              Id: {todo.id}
+              <br />
+              Title: {todo.title}
+              <br />
+              Message: {todo.description}
+              <button
+                style={{
+                  marginLeft: "9px",
+                  fontSize: "15px"
+                }}
+                //calling to delete the todo function
+                onClick={() => deleteTodo(todo.id)}
+              >
+                Delete
+              </button>
+            </li>
           </div>
         ))}
       </ul>
     </div>
   );
-}
-
-//code for deleting the todos
-function deleteTodo(props){
-  fetch("http://localhost:3000/todos/" + props ,{
-    method : "DELETE",
-  })
 }
 
 

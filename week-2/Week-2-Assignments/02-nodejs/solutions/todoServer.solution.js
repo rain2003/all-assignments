@@ -48,12 +48,7 @@ app.use(bodyParser.json());
 app.use(cors());
 
 
-let todos = [{
-  id: 1,
-  title : " i have to study today",
-  description : "only god can help me"
-}
-];
+let todos = [];
 
 app.get('/todos', (req, res) => {
   res.json(todos);
