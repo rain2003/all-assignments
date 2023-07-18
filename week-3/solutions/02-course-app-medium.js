@@ -1,9 +1,9 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const app = express();
-
+const cors = require('cors');
 app.use(express.json());
-
+app.use(cors());
 let ADMINS = [];
 let USERS = [];
 let COURSES = [];
@@ -49,7 +49,6 @@ app.post('/admin/signup', (req, res) => {
 app.post('/admin/login', (req, res) => {
   const { username, password } = req.headers;
   const admin = ADMINS.find(a => a.username === username && a.password === password);
-
   if (admin) {
     const token = generateJwt(admin);
     res.json({ message: 'Logged in successfully', token });
