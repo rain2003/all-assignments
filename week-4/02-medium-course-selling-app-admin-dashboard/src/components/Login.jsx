@@ -15,7 +15,7 @@ function Login() {
             justifyContent : 'center',
         }}>
         
-        <h1 >Welcome to course selling website!</h1>
+        <h1 >Welcome Back to Courses</h1>
         </div>
         <div style={{
             display : 'flex',

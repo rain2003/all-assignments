@@ -62,6 +62,7 @@ app.post('/admin/courses', authenticateJwt, (req, res) => {
   course.id = COURSES.length + 1; 
   COURSES.push(course);
   res.json({ message: 'Course created successfully', courseId: course.id });
+  console.log(course);
 });
 
 app.put('/admin/courses/:courseId', authenticateJwt, (req, res) => {

@@ -3,8 +3,10 @@ import React from "react";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Card from '@mui/material/Card';
-
+import { useNavigate } from "react-router-dom";
 function Appbar(){
+    const navigate = useNavigate();
+
 return <div style={{
     display : 'flex',
     justifyContent : 'space-between'
@@ -18,14 +20,14 @@ return <div style={{
         }}>
         <Button variant="contained"
         onClick={()=>{
-            window.location = '/register'
+            navigate("/register")
         }}
         >Sign Up</Button>
         </div>
         <div>
         <Button variant="contained"
         onClick={()=>{
-            window.location = '/login'
+            navigate('/login')
         }}
         >Sign In</Button>
         </div>
